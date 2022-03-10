@@ -7,15 +7,45 @@ const weatherEl = document.querySelector('#weatherPlaceholder');
 const fiveDayEl = document.querySelector('#fiveDayPlaceholder');
 // let currentDay = moment().format("MMMM Do YYYY, h:mm:ss a");
 // put currentDay on index
+var currentCity = [];
+var lastCity = [];
 
 const api_key = "673915a845190fbcf5deefda622274f1";
 let lat = '34.009289';
 let lon = '-81.037086';
 var units = '&units=imperial'
 
+var formSubmitHandler = function (event) {
+  event.preventDefault();
+
+  if (cityName) {
+    geoHandler(cityName);
+    geoHistoryLog(cityName);
+  }
+};
+
+
+//  Getting city input
+var geoHandler = function (city) {
+  var geoURL = 'http://api.openweathermap.org/geo/1.0/direct?q=London' + '&appid=' + api_key;
+  fetch(geoURL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      var lat = data.lat;
+      var lon = data.lon;
+    })
+    .catch(function (err){
+      console.log(err);
+    });
+};
+console.log(geoHandler());
+
+
 
 // function for current city selected
-// figure out lat/long var for city selected
 function getOnecall() {
   let onecallURL = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&appid=' + api_key + units;
   
@@ -38,8 +68,8 @@ function getOnecall() {
     .catch(function (err) {
       console.log(err);
     });
-}
-console.log(getOnecall());
+};
+// console.log(getOnecall());
 
 
 // 5 day forecast
@@ -63,4 +93,4 @@ function getForecast() {
     .catch(function (err) {
       console.log(err);
     });
-}
+};
